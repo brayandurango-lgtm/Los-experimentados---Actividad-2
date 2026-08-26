@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error | Flores del Valle</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="page-shell narrow error-page">
+    <p class="eyebrow">Flores del Valle</p>
+    <h1 th:text="${titulo ?: 'Solicitud no disponible'}">Solicitud no disponible</h1>
+    <p class="lead" th:text="${mensaje ?: 'No pudimos procesar la solicitud.'}">No pudimos procesar la solicitud.</p>
+    <a class="button" th:href="@{/dashboard}">Volver al dashboard</a>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

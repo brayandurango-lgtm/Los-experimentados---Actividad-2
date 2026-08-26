@@ -1,0 +1,10 @@
+@import url("/css/estilos.css");
+
+:root {
+    --focus-ring: #d9785f;
+}
+
+:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+}

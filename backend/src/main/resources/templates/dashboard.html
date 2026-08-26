@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | Flores del Valle</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="page-shell">
+    <p class="eyebrow">Panel general</p>
+    <h1>Todo lo que florece, en un vistazo.</h1>
+    <section class="stats dashboard-stats">
+        <a class="stat-card" th:href="@{/flores}"><span>Flores disponibles</span><strong th:text="${floresDisponibles}">0</strong><small>variedades activas con stock</small></a>
+        <a class="stat-card" th:href="@{/pedidos}"><span>Pedidos en curso</span><strong th:text="${pedidosEnCurso}">0</strong><small>encargos por preparar</small></a>
+        <a class="stat-card" th:href="@{/pedidos}"><span>Pedidos completados</span><strong th:text="${pedidosCompletados}">0</strong><small>listos para entregar</small></a>
+        <a class="stat-card" th:href="@{/entregas}"><span>Entregas pendientes</span><strong th:text="${entregasPendientes}">0</strong><small>programadas o en ruta</small></a>
+        <a class="stat-card" th:href="@{/facturas}"><span>Ventas</span><strong th:text="|$ ${#numbers.formatDecimal(ventas, 1, 2)}|">$ 0.00</strong><small>facturas pagadas</small></a>
+        <a class="stat-card" th:href="@{/facturas}"><span>Facturas pendientes</span><strong th:text="${facturasPendientes}">0</strong><small>por cobrar</small></a>
+    </section>
+    <section class="quick-actions">
+        <p class="eyebrow">Accesos rápidos</p>
+        <div class="module-links quick-links">
+            <a th:href="@{/flores}"><b>Inventario</b><span>Consulta existencias →</span></a>
+            <a th:href="@{/pedidos/nuevo}"><b>Nuevo pedido</b><span>Registra un encargo →</span></a>
+            <a th:href="@{/entregas}"><b>Entregas</b><span>Coordina envíos →</span></a>
+            <a th:href="@{/facturas}"><b>Facturación</b><span>Registra pagos →</span></a>
+            <a th:href="@{/reportes}"><b>Reportes</b><span>Analiza resultados →</span></a>
+        </div>
+    </section>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

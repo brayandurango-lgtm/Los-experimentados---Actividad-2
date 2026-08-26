@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inventario | Flores del Valle</title><link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="page-shell">
+    <div class="page-title"><div><p class="eyebrow">Inventario</p><h1>Flores disponibles</h1></div><a class="button" th:href="@{/flores/nueva}">+ Nueva flor</a></div>
+    <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
+    <form class="search-bar" method="get" th:action="@{/flores}"><input name="busqueda" th:value="${busqueda}" placeholder="Buscar por tipo, color o variedad"><button type="submit">Buscar</button></form>
+    <section class="catalog-panel"><div class="section-heading"><h2>Catálogo actual</h2><span class="count" th:text="${flores.size()} + ' registros'"></span></div>
+        <div class="empty-state" th:if="${flores.empty}">No hay flores que coincidan con la búsqueda.</div>
+        <div class="flower-list" th:unless="${flores.empty}"><article class="flower-row" th:each="flor : ${flores}"><div class="flower-icon">✾</div><div class="flower-data"><h3 th:text="${flor.tipo}">Rosa</h3><p th:text="${flor.color + ' · ' + flor.variedad}">Roja · Clásica</p></div><strong th:text="|$ ${#numbers.formatDecimal(flor.precioVenta, 1, 2)}|">$ 12.00</strong><span class="stock" th:text="|${flor.cantidadDisponible} uds. · ${flor.estado}|">10 uds.</span><a class="row-link" th:href="@{/flores/{id}(id=${flor.id})}">Ver</a></article></div>
+    </section>
+</main><div th:replace="~{fragments/footer :: footer}"></div>
+</body></html>
