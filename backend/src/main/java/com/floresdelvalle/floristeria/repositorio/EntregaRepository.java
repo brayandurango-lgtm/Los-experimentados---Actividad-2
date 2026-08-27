@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EntregaRepository extends JpaRepository<Entrega, Long> {
     long countByEstado(Entrega.Estado estado);
     List<Entrega> findByEstado(Entrega.Estado estado);
+    boolean existsByPedidoId(Long pedidoId);
+    boolean existsByConductorId(Long conductorId);
 }

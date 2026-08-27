@@ -29,7 +29,13 @@ public class EntregaController {
     @PostMapping("/entregas")
     public String guardar(@Valid Entrega entrega, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) { prepararFormulario(model, entrega); return "entregas/formulario"; }
-        entregaService.guardar(entrega); redirectAttributes.addFlashAttribute("mensaje", "Entrega registrada"); return "redirect:/entregas";
+        try {
+            if (entrega.getId() == null) { entregaService.crear(entrega); redirectAttributes.addFlashAttribute("mensaje", "Entrega registrada"); }
+            else { entregaService.actualizar(entrega.getId(), entrega); redirectAttributes.addFlashAttribute("mensaje", "Entrega actualizada correctamente"); }
+        } catch (IllegalArgumentException exception) {
+            bindingResult.rejectValue("pedido", "duplicado", exception.getMessage()); prepararFormulario(model, entrega); return "entregas/formulario";
+        }
+        return "redirect:/entregas";
     }
 
     @GetMapping("/entregas/{id}")
@@ -40,6 +46,9 @@ public class EntregaController {
 
     @PostMapping("/entregas/{id}/estado")
     public String cambiarEstado(@PathVariable Long id, Entrega.Estado estado, RedirectAttributes redirectAttributes) { entregaService.cambiarEstado(id, estado); redirectAttributes.addFlashAttribute("mensaje", "Estado de entrega actualizado"); return "redirect:/entregas/" + id; }
+
+    @PostMapping("/entregas/{id}/eliminar")
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) { entregaService.eliminar(id); redirectAttributes.addFlashAttribute("mensaje", "Entrega eliminada correctamente"); return "redirect:/entregas"; }
 
     private void prepararFormulario(Model model, Entrega entrega) { model.addAttribute("entrega", entrega); model.addAttribute("pedidos", pedidoService.listar()); model.addAttribute("conductores", conductorService.listar()); model.addAttribute("estados", Entrega.Estado.values()); }
 }

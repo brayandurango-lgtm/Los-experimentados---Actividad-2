@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
@@ -39,13 +40,16 @@ public class Factura {
 
     @NotNull(message = "El subtotal es obligatorio")
     @DecimalMin(value = "0.00", inclusive = true)
+    @Digits(integer = 10, fraction = 2, message = "El subtotal debe tener un formato válido")
     private BigDecimal subtotal = BigDecimal.ZERO;
 
     @NotNull(message = "Los costos adicionales son obligatorios")
     @DecimalMin(value = "0.00", inclusive = true)
+    @Digits(integer = 10, fraction = 2, message = "Los costos adicionales deben tener un formato válido")
     private BigDecimal costosAdicionales = BigDecimal.ZERO;
 
     @DecimalMin(value = "0.01")
+    @Digits(integer = 10, fraction = 2)
     private BigDecimal total;
 
     @NotNull(message = "La fecha es obligatoria")

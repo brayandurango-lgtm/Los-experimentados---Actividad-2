@@ -102,6 +102,7 @@ public class FlorService {
 
     @Transactional
     public void eliminar(Long id) {
-        desactivar(id);
+        buscarPorId(id);
+        florRepository.deleteById(id);
     }
 }

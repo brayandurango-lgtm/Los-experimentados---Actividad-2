@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,8 +34,30 @@ public class ClienteController {
         if (bindingResult.hasErrors()) {
             return "clientes/formulario";
         }
-        clienteService.guardar(cliente);
-        redirectAttributes.addFlashAttribute("mensaje", "Cliente creado correctamente");
+        if (cliente.getId() == null) {
+            clienteService.crear(cliente);
+            redirectAttributes.addFlashAttribute("mensaje", "Cliente creado correctamente");
+        } else {
+            clienteService.actualizar(cliente.getId(), cliente);
+            redirectAttributes.addFlashAttribute("mensaje", "Cliente actualizado correctamente");
+        }
+        return "redirect:/clientes";
+    }
+
+    @GetMapping("/clientes/{id}/editar")
+    public String editar(@PathVariable Long id, Model model) {
+        model.addAttribute("cliente", clienteService.buscarPorId(id));
+        return "clientes/formulario";
+    }
+
+    @PostMapping("/clientes/{id}/eliminar")
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            clienteService.eliminar(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Cliente eliminado correctamente");
+        } catch (IllegalStateException exception) {
+            redirectAttributes.addFlashAttribute("mensaje", exception.getMessage());
+        }
         return "redirect:/clientes";
     }
 }

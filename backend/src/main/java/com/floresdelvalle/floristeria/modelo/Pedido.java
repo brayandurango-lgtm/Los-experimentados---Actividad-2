@@ -13,9 +13,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -62,6 +64,7 @@ public class Pedido {
 
     @NotNull(message = "El presupuesto es obligatorio")
     @DecimalMin(value = "0.01", message = "El presupuesto debe ser mayor que cero")
+    @Digits(integer = 10, fraction = 2, message = "El presupuesto debe tener un formato válido")
     private BigDecimal presupuesto;
 
     @Size(max = 500, message = "Las observaciones no pueden superar 500 caracteres")
@@ -74,16 +77,17 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles = new ArrayList<>();
 
-    @OneToOne(mappedBy = "pedido")
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.REMOVE)
     private Entrega entrega;
 
-    @OneToOne(mappedBy = "pedido")
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.REMOVE)
     private Factura factura;
 
     @Transient
     private Long florId;
 
     @Transient
+    @Positive(message = "La cantidad debe ser mayor que cero")
     private Integer cantidadFlor;
 
     public Long getId() { return id; }

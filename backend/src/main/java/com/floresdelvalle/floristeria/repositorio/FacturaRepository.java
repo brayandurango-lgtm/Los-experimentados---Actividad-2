@@ -13,6 +13,7 @@ public interface FacturaRepository extends JpaRepository<Factura, Long> {
     List<Factura> findByEstado(Factura.Estado estado);
 
     Optional<Factura> findByPedidoId(Long pedidoId);
+    boolean existsByPedidoId(Long pedidoId);
     @Query("select coalesce(sum(f.total), 0) from Factura f where f.estado = 'PAGADA'")
     BigDecimal totalVentasPagadas();
 }

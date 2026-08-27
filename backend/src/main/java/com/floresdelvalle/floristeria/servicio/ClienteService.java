@@ -16,5 +16,11 @@ public class ClienteService {
     @Transactional @SuppressWarnings("null") public Cliente guardar(Cliente cliente) { return clienteRepository.save(cliente); }
     @Transactional public Cliente crear(Cliente cliente) { if (cliente == null) throw new IllegalArgumentException("El cliente es obligatorio"); cliente.setId(null); return guardar(cliente); }
     @Transactional public Cliente actualizar(Long id, Cliente datos) { Cliente cliente = buscarPorId(id); if (datos == null) throw new IllegalArgumentException("Los datos del cliente son obligatorios"); cliente.setNombre(datos.getNombre()); cliente.setTelefono(datos.getTelefono()); cliente.setEmail(datos.getEmail()); cliente.setDireccion(datos.getDireccion()); return guardar(cliente); }
-    @Transactional public void eliminar(Long id) { clienteRepository.delete(buscarPorId(id)); }
+    @Transactional public void eliminar(Long id) {
+        Cliente cliente = buscarPorId(id);
+        if (clienteRepository.existsByPedidosClienteId(id)) {
+            throw new IllegalStateException("No se puede eliminar el cliente porque tiene pedidos relacionados");
+        }
+        clienteRepository.delete(cliente);
+    }
 }

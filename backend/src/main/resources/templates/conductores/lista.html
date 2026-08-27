@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conductores | Flores del Valle</title><link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="page-shell">
+    <div class="page-title"><div><p class="eyebrow">Logística</p><h1>Conductores</h1></div><a class="button" th:href="@{/conductores/nuevo}">+ Nuevo conductor</a></div>
+    <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
+    <section class="catalog-panel">
+        <div class="section-heading"><h2>Conductores registrados</h2><span class="count" th:text="${conductores.size()} + ' conductores'"></span></div>
+        <div class="empty-state" th:if="${conductores.empty}">Aún no hay conductores registrados.</div>
+        <div class="flower-list" th:unless="${conductores.empty}">
+            <article class="flower-row" th:each="conductor : ${conductores}">
+                <div class="flower-icon">◎</div>
+                <div class="flower-data"><h3 th:text="${conductor.nombre}">Conductor</h3><p th:text="${conductor.telefono + ' · Documento: ' + conductor.documento}">Teléfono · Documento</p></div>
+                <span class="stock" th:text="${conductor.estado}">ACTIVO</span>
+                <div class="flower-actions"><a class="row-link" th:href="@{/conductores/{id}/editar(id=${conductor.id})}">Editar</a><form th:action="@{/conductores/{id}/eliminar(id=${conductor.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este conductor?');"><button class="row-link" type="submit">Eliminar</button></form></div>
+            </article>
+        </div>
+    </section>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

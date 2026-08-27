@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 @Entity
 public class Pago {
 
-    public enum Estado { REGISTRADO, ANULADO }
+    public enum Estado { PENDIENTE, PAGADO, REGISTRADO, ANULADO }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,7 @@ public class Pago {
 
     @NotNull(message = "El valor es obligatorio")
     @DecimalMin(value = "0.01", message = "El valor debe ser mayor que cero")
+    @Digits(integer = 10, fraction = 2, message = "El valor debe tener un formato válido")
     private BigDecimal valor;
 
     @NotBlank(message = "El método de pago es obligatorio")
@@ -43,7 +45,7 @@ public class Pago {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Estado estado = Estado.REGISTRADO;
+    private Estado estado = Estado.PENDIENTE;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

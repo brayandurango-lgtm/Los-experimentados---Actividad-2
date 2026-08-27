@@ -13,7 +13,8 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final FlorService florService;
     public PedidoService(PedidoRepository pedidoRepository, FlorService florService) { this.pedidoRepository = pedidoRepository; this.florService = florService; }
-    @Transactional(readOnly = true) public List<Pedido> listar() { return pedidoRepository.findAll(); }
+    @Transactional(readOnly = true) public List<Pedido> listar() { return listar(null); }
+    @Transactional(readOnly = true) public List<Pedido> listar(String busqueda) { if (busqueda == null || busqueda.isBlank()) return pedidoRepository.findAll(); return pedidoRepository.buscar(busqueda.trim()); }
     @Transactional(readOnly = true) public long contarEnCurso() { return pedidoRepository.countByEstado(Pedido.Estado.EN_CURSO); }
     @Transactional(readOnly = true) public long contarCompletados() { return pedidoRepository.countByEstado(Pedido.Estado.COMPLETADO); }
     @Transactional(readOnly = true) @SuppressWarnings("null") public Pedido buscarPorId(Long id) { return pedidoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El pedido no existe")); }
@@ -36,5 +37,6 @@ public class PedidoService {
     }
     @Transactional public Pedido crear(Pedido pedido) { if (pedido != null) pedido.setId(null); return guardar(pedido); }
     @Transactional public Pedido actualizar(Long id, Pedido datos) { Pedido pedido = buscarPorId(id); if (datos == null) throw new IllegalArgumentException("Los datos del pedido son obligatorios"); pedido.setCliente(datos.getCliente()); pedido.setFechaPedido(datos.getFechaPedido()); pedido.setFechaEntrega(datos.getFechaEntrega()); pedido.setOcasion(datos.getOcasion()); pedido.setPresupuesto(datos.getPresupuesto()); pedido.setEstado(datos.getEstado()); pedido.setObservaciones(datos.getObservaciones()); pedido.setDireccionEntrega(datos.getDireccionEntrega()); pedido.setContacto(datos.getContacto()); pedido.setTipoArreglo(datos.getTipoArreglo()); return pedidoRepository.save(pedido); }
+    @Transactional public void eliminar(Long id) { pedidoRepository.delete(buscarPorId(id)); }
     @Transactional @SuppressWarnings("null") public void cambiarEstado(Long id, Pedido.Estado estado) { Pedido pedido = buscarPorId(id); pedido.setEstado(estado); pedidoRepository.save(pedido); }
 }

@@ -40,8 +40,13 @@ public class FlorController {
         if (bindingResult.hasErrors()) {
             return "flores/formulario";
         }
-        florService.guardar(flor);
-        redirectAttributes.addFlashAttribute("mensaje", "Flor agregada al catálogo");
+        if (flor.getId() == null) {
+            florService.crear(flor);
+            redirectAttributes.addFlashAttribute("mensaje", "Flor agregada al catálogo");
+        } else {
+            florService.actualizar(flor.getId(), flor);
+            redirectAttributes.addFlashAttribute("mensaje", "Flor actualizada correctamente");
+        }
         return "redirect:/flores";
     }
 
@@ -57,10 +62,10 @@ public class FlorController {
         return "flores/formulario";
     }
 
-    @GetMapping("/flores/eliminar/{id}")
+    @PostMapping("/flores/eliminar/{id}")
     public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         florService.eliminar(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Flor desactivada");
+        redirectAttributes.addFlashAttribute("mensaje", "Flor eliminada del catálogo");
         return "redirect:/flores";
     }
 

@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -35,6 +36,7 @@ public class Flor {
 
     @NotNull(message = "El precio de compra es obligatorio")
     @DecimalMin(value = "0.01", message = "El precio de compra debe ser mayor que cero")
+    @Digits(integer = 10, fraction = 2, message = "El precio de compra debe tener un formato válido")
     private BigDecimal precioCompra;
 
     @NotNull(message = "El inventario es obligatorio")
@@ -43,6 +45,7 @@ public class Flor {
 
     @NotNull(message = "El precio de venta es obligatorio")
     @DecimalMin(value = "0.01", message = "El precio de venta debe ser mayor que cero")
+    @Digits(integer = 10, fraction = 2, message = "El precio de venta debe tener un formato válido")
     private BigDecimal precioVenta;
 
     @NotBlank(message = "El estado es obligatorio")

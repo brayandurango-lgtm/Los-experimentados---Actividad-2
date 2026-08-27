@@ -37,6 +37,7 @@ public class PagoService {
         }
         pago.setId(null);
         pago.setFactura(factura);
+        factura.getPagos().add(pago);
         return pagoRepository.save(pago);
     }
 

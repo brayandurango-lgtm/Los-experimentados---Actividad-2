@@ -28,7 +28,13 @@ public class FacturaController {
     @PostMapping("/facturas")
     public String guardar(@Valid Factura factura, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) { prepararFormulario(model, factura); return "facturas/formulario"; }
-        facturaService.guardar(factura); redirectAttributes.addFlashAttribute("mensaje", "Factura registrada"); return "redirect:/facturas";
+        try {
+            if (factura.getId() == null) { facturaService.crear(factura); redirectAttributes.addFlashAttribute("mensaje", "Factura registrada"); }
+            else { facturaService.actualizar(factura.getId(), factura); redirectAttributes.addFlashAttribute("mensaje", "Factura actualizada correctamente"); }
+        } catch (IllegalArgumentException exception) {
+            bindingResult.rejectValue("pedido", "duplicado", exception.getMessage()); prepararFormulario(model, factura); return "facturas/formulario";
+        }
+        return "redirect:/facturas";
     }
 
     @GetMapping("/facturas/{id}")
@@ -41,10 +47,22 @@ public class FacturaController {
         return "redirect:/facturas";
     }
 
+    @GetMapping("/facturas/{id}/editar")
+    public String editar(@PathVariable Long id, Model model) { prepararFormulario(model, facturaService.buscarPorId(id)); return "facturas/formulario"; }
+
+    @PostMapping("/facturas/{id}/eliminar")
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) { facturaService.eliminar(id); redirectAttributes.addFlashAttribute("mensaje", "Factura eliminada correctamente"); return "redirect:/facturas"; }
+
     @PostMapping("/facturas/{id}/pagos")
     public String registrarPago(@PathVariable Long id, @Valid Pago pago, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) { redirectAttributes.addFlashAttribute("mensaje", "Revisa los datos del pago"); return "redirect:/facturas/" + id; }
-        facturaService.registrarPago(id, pago); redirectAttributes.addFlashAttribute("mensaje", "Pago administrativo registrado"); return "redirect:/facturas/" + id;
+        try {
+            facturaService.registrarPago(id, pago);
+            redirectAttributes.addFlashAttribute("mensaje", "Pago administrativo registrado");
+        } catch (IllegalArgumentException | IllegalStateException exception) {
+            redirectAttributes.addFlashAttribute("mensaje", exception.getMessage());
+        }
+        return "redirect:/facturas/" + id;
     }
 
     private void prepararFormulario(Model model, Factura factura) { model.addAttribute("factura", factura); model.addAttribute("pedidos", pedidoService.listar()); }

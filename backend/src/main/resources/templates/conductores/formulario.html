@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conductor | Flores del Valle</title><link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="page-shell narrow">
+    <p class="eyebrow">Logística</p>
+    <h1 th:text="${conductor.id == null ? 'Registrar conductor' : 'Editar conductor'}">Registrar conductor</h1>
+    <form class="form-panel light-panel" th:action="@{/conductores}" th:object="${conductor}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <label>Nombre<input type="text" th:field="*{nombre}" required><small th:errors="*{nombre}"></small></label>
+        <label>Contacto<input type="text" th:field="*{telefono}" required><small th:errors="*{telefono}"></small></label>
+        <label>Documento<input type="text" th:field="*{documento}" required><small th:errors="*{documento}"></small></label>
+        <label>Estado<select th:field="*{estado}" required><option value="ACTIVO">Activo</option><option value="INACTIVO">Inactivo</option></select><small th:errors="*{estado}"></small></label>
+        <button type="submit">Guardar conductor <span>→</span></button>
+    </form>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
