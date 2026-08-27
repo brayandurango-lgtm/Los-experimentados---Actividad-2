@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <body>
-<footer th:fragment="footer">Flores del Valle · Gestión floral</footer>
+<footer th:fragment="footer">
+	<div class="footer-recommendations">
+		<span class="footer-title">Recomendaciones florales</span>
+		<span>Cuida cada tallo con agua fresca y luz adecuada.</span>
+	</div>
+	<div class="footer-contact">
+		<span>Contacto: 3244727691</span>
+		<span>Medellin - Antioquia - Colombia</span>
+		<span>2026 Flores del Valle · Gestión floral</span>
+	</div>
+	<div class="social-links" aria-label="Redes sociales">
+		<a href="https://www.instagram.com/brauxon20/" target="_blank" rel="noopener noreferrer" aria-label="Instagram brauxon20"><span class="social-icon" aria-hidden="true">◎</span> brauxon20</a>
+		<a href="https://www.tiktok.com/@brauxon20" target="_blank" rel="noopener noreferrer" aria-label="TikTok brauxon20"><span class="social-icon" aria-hidden="true">♪</span> brauxon20</a>
+		<a href="https://www.reddit.com/user/BrauXon20/" target="_blank" rel="noopener noreferrer" aria-label="Reddit BrauXon20"><span class="social-icon" aria-hidden="true">●</span> BrauXon20</a>
+	</div>
+</footer>
 <script th:src="@{/js/app.js}"></script>
 </body>
 </html>

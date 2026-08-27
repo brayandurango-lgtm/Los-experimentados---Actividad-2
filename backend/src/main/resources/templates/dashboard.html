@@ -11,6 +11,14 @@
 <main class="page-shell">
     <p class="eyebrow">Panel general</p>
     <h1>Todo lo que florece, en un vistazo.</h1>
+    <section class="dashboard-hero" aria-label="Flores del Valle">
+        <img th:src="@{/img/Inventario - Flores.jpeg}" alt="Arreglo floral de Flores del Valle">
+        <div class="dashboard-hero__content">
+            <p class="eyebrow">Flores del Valle</p>
+            <h2>Gestión inteligente para una floristería más eficiente</h2>
+            <a class="button" th:href="@{/flores}">Explorar inventario <span>→</span></a>
+        </div>
+    </section>
     <section class="stats dashboard-stats">
         <a class="stat-card" th:href="@{/flores}"><span>Flores disponibles</span><strong th:text="${floresDisponibles}">0</strong><small>variedades activas con stock</small></a>
         <a class="stat-card" th:href="@{/pedidos}"><span>Pedidos en curso</span><strong th:text="${pedidosEnCurso}">0</strong><small>encargos por preparar</small></a>

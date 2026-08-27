@@ -158,3 +158,7 @@ Somos estudiantes con experiencia en la Institución Universitaria Digital de An
 - Controladores Spring MVC enlazados con vistas Thymeleaf.
 - Interfaz web responsive para los módulos principales.
 - Validación de compilación mediante `mvn clean test`.
+
+## El enlace que nos permite observar el proyecto
+
+http://localhost:8080/dashboard 
