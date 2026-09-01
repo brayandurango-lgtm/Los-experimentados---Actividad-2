@@ -1,1 +1,64 @@
-<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pedidos | Flores del Valle</title><link rel="stylesheet" th:href="@{/css/estilos.css}"></head><body><div th:replace="~{fragments/header :: header}"></div><main class="page-shell"><div class="page-title"><div><p class="eyebrow">Pedidos</p><h1>Encargos florales</h1></div><a class="button" th:href="@{/pedidos/nuevo}">+ Nuevo pedido</a></div><div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div><form class="search-bar" method="get" th:action="@{/pedidos}"><input name="busqueda" th:value="${busqueda}" placeholder="Buscar por cliente, arreglo u ocasión"><button type="submit">Buscar</button></form><section class="catalog-panel"><div class="section-heading"><h2>Pedidos registrados</h2><span class="count" th:text="${pedidos.size()} + ' pedidos'"></span></div><div class="empty-state" th:if="${pedidos.empty}">Aún no hay pedidos registrados.</div><div class="flower-list" th:unless="${pedidos.empty}"><article class="flower-row order-row" th:each="pedido : ${pedidos}"><div class="flower-icon">№</div><div class="flower-data"><h3 th:text="|Pedido #${pedido.id} · ${pedido.cliente.nombre}|">Pedido #1</h3><p th:text="${pedido.tipoArreglo + ' · ' + pedido.ocasion}">Ramo · Cumpleaños</p></div><strong th:text="|$ ${#numbers.formatDecimal(pedido.presupuesto, 1, 2)}|">$ 80.00</strong><span class="stock" th:text="${pedido.estado}">EN_CURSO</span><div class="flower-actions"><a class="row-link" th:href="@{/pedidos/{id}(id=${pedido.id})}">Ver</a><a class="row-link" th:href="@{/pedidos/{id}/editar(id=${pedido.id})}">Editar</a><form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este pedido?');"><button class="row-link" type="submit">Eliminar</button></form></div></article></div></section></main><div th:replace="~{fragments/footer :: footer}"></div></body></html>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pedidos | Flores del Valle</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main class="page-shell">
+        <div class="page-title">
+            <div>
+                <p class="eyebrow">Pedidos</p>
+                <h1>Encargos florales</h1>
+            </div>
+            <a class="button" th:href="@{/pedidos/nuevo}">+ Nuevo pedido</a>
+        </div>
+
+        <!-- Imagen principal del módulo Pedidos -->
+        <div style="margin-bottom: 1.5rem; text-align: center;">
+            <img th:src="@{/img/pedidos_flores.jpg}" alt="Pedidos Florales" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px;">
+        </div>
+
+        <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
+
+        <form class="search-bar" method="get" th:action="@{/pedidos}">
+            <input name="busqueda" th:value="${busqueda}" placeholder="Buscar por cliente, arreglo u ocasión">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <section class="catalog-panel">
+            <div class="section-heading">
+                <h2>Pedidos registrados</h2>
+                <span class="count" th:text="${pedidos.size()} + ' pedidos'"></span>
+            </div>
+
+            <div class="empty-state" th:if="${pedidos.empty}">Aún no hay pedidos registrados.</div>
+
+            <div class="flower-list" th:unless="${pedidos.empty}">
+                <article class="flower-row order-row" th:each="pedido : ${pedidos}">
+                    <div class="flower-icon">№</div>
+                    <div class="flower-data">
+                        <h3 th:text="|Pedido #${pedido.id} · ${pedido.cliente.nombre}|">Pedido #1</h3>
+                        <p th:text="${pedido.tipoArreglo + ' · ' + pedido.ocasion}">Ramo · Cumpleaños</p>
+                    </div>
+                    <strong th:text="|$ ${#numbers.formatDecimal(pedido.presupuesto, 1, 2)}|">$ 80.00</strong>
+                    <span class="stock" th:text="${pedido.estado}">EN_CURSO</span>
+                    <div class="flower-actions">
+                        <a class="row-link" th:href="@{/pedidos/{id}(id=${pedido.id})}">Ver</a>
+                        <a class="row-link" th:href="@{/pedidos/{id}/editar(id=${pedido.id})}">Editar</a>
+                        <form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este pedido?');">
+                            <button class="row-link" type="submit">Eliminar</button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

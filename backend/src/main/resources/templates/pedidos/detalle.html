@@ -1,1 +1,70 @@
-<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Detalle pedido | Flores del Valle</title><link rel="stylesheet" th:href="@{/css/estilos.css}"></head><body><div th:replace="~{fragments/header :: header}"></div><main class="page-shell narrow"><p class="eyebrow" th:text="|Pedido #${pedido.id}|"></p><h1 th:text="${pedido.tipoArreglo}"></h1><p class="lead" th:text="${pedido.ocasion}"></p><section class="detail-grid"><div><span>Cliente</span><strong th:text="${pedido.cliente.nombre}"></strong></div><div><span>Entrega</span><strong th:text="${#temporals.format(pedido.fechaEntrega, 'dd/MM/yyyy')}"></strong></div><div><span>Presupuesto</span><strong th:text="|$ ${#numbers.formatDecimal(pedido.presupuesto, 1, 2)}|"></strong></div><div><span>Estado</span><strong th:text="${pedido.estado}"></strong></div></section><p class="detail-copy"><b>Dirección:</b> <span th:text="${pedido.direccionEntrega}"></span><br><b>Contacto:</b> <span th:text="${pedido.contacto}"></span></p><form class="status-form" th:action="@{/pedidos/{id}/estado(id=${pedido.id})}" method="post"><label>Estado<select name="estado"><option th:each="estado : ${T(com.floresdelvalle.floristeria.modelo.Pedido.Estado).values()}" th:value="${estado}" th:text="${estado}" th:selected="${estado == pedido.estado}"></option></select></label><button class="button" type="submit">Cambiar estado</button></form><div class="actions"><a class="button" th:href="@{/pedidos/{id}/editar(id=${pedido.id})}">Editar</a><form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este pedido?');"><button class="button secondary" type="submit">Eliminar</button></form><a class="text-link" th:href="@{/pedidos}">Volver</a></div></main><div th:replace="~{fragments/footer :: footer}"></div></body></html>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalle pedido | Flores del Valle</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <main class="page-shell narrow">
+        <p class="eyebrow" th:text="|Pedido #${pedido.id}|"></p>
+        <h1 th:text="${pedido.tipoArreglo}"></h1>
+        <p class="lead" th:text="${pedido.ocasion}"></p>
+
+        <!-- Imagen en el detalle -->
+        <div style="margin-bottom: 1.5rem; text-align: center;">
+            <img th:src="@{/img/pedidos_flores.jpg}" alt="Detalle del Pedido" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px;">
+        </div>
+
+        <section class="detail-grid">
+            <div>
+                <span>Cliente</span>
+                <strong th:text="${pedido.cliente.nombre}"></strong>
+            </div>
+            <div>
+                <span>Entrega</span>
+                <strong th:text="${#temporals.format(pedido.fechaEntrega, 'dd/MM/yyyy')}"></strong>
+            </div>
+            <div>
+                <span>Presupuesto</span>
+                <strong th:text="|$ ${#numbers.formatDecimal(pedido.presupuesto, 1, 2)}|"></strong>
+            </div>
+            <div>
+                <span>Estado</span>
+                <strong th:text="${pedido.estado}"></strong>
+            </div>
+        </section>
+
+        <p class="detail-copy">
+            <b>Dirección:</b> <span th:text="${pedido.direccionEntrega}"></span><br>
+            <b>Contacto:</b> <span th:text="${pedido.contacto}"></span>
+        </p>
+
+        <form class="status-form" th:action="@{/pedidos/{id}/estado(id=${pedido.id})}" method="post">
+            <label>Estado
+                <select name="estado">
+                    <option th:each="estado : ${T(com.floresdelvalle.floristeria.modelo.Pedido.Estado).values()}" 
+                            th:value="${estado}" 
+                            th:text="${estado}" 
+                            th:selected="${estado == pedido.estado}">
+                    </option>
+                </select>
+            </label>
+            <button class="button" type="submit">Cambiar estado</button>
+        </form>
+
+        <div class="actions">
+            <a class="button" th:href="@{/pedidos/{id}/editar(id=${pedido.id})}">Editar</a>
+            <form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este pedido?');">
+                <button class="button secondary" type="submit">Eliminar</button>
+            </form>
+            <a class="text-link" th:href="@{/pedidos}">Volver</a>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
