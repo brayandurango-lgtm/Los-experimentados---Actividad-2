@@ -1,6 +1,7 @@
 package com.floresdelvalle.floristeria.servicio;
 
 import com.floresdelvalle.floristeria.modelo.Flor;
+import com.floresdelvalle.floristeria.repositorio.DetallePedidoRepository;
 import com.floresdelvalle.floristeria.repositorio.FlorRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class FlorService {
 
     private final FlorRepository florRepository;
+    private final DetallePedidoRepository detallePedidoRepository;
 
-    public FlorService(FlorRepository florRepository) {
+    public FlorService(FlorRepository florRepository, DetallePedidoRepository detallePedidoRepository) {
         this.florRepository = florRepository;
+        this.detallePedidoRepository = detallePedidoRepository;
     }
 
     @Transactional(readOnly = true)
@@ -102,7 +105,10 @@ public class FlorService {
 
     @Transactional
     public void eliminar(Long id) {
-        buscarPorId(id);
-        florRepository.deleteById(id);
+        Flor flor = buscarPorId(id);
+        if (detallePedidoRepository.existsByFlorId(id)) {
+            throw new IllegalStateException("No se puede eliminar la flor porque ya está asociada a pedidos registrados");
+        }
+        florRepository.delete(flor);
     }
 }

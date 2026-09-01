@@ -3,6 +3,8 @@ package com.floresdelvalle.floristeria.servicio;
 import com.floresdelvalle.floristeria.modelo.Pedido;
 import com.floresdelvalle.floristeria.modelo.DetallePedido;
 import com.floresdelvalle.floristeria.modelo.Flor;
+import com.floresdelvalle.floristeria.repositorio.EntregaRepository;
+import com.floresdelvalle.floristeria.repositorio.FacturaRepository;
 import com.floresdelvalle.floristeria.repositorio.PedidoRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -11,8 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PedidoService {
     private final PedidoRepository pedidoRepository;
+    private final EntregaRepository entregaRepository;
+    private final FacturaRepository facturaRepository;
     private final FlorService florService;
-    public PedidoService(PedidoRepository pedidoRepository, FlorService florService) { this.pedidoRepository = pedidoRepository; this.florService = florService; }
+
+    public PedidoService(PedidoRepository pedidoRepository, EntregaRepository entregaRepository,
+                        FacturaRepository facturaRepository, FlorService florService) {
+        this.pedidoRepository = pedidoRepository;
+        this.entregaRepository = entregaRepository;
+        this.facturaRepository = facturaRepository;
+        this.florService = florService;
+    }
+
     @Transactional(readOnly = true) public List<Pedido> listar() { return listar(null); }
     @Transactional(readOnly = true) public List<Pedido> listar(String busqueda) { if (busqueda == null || busqueda.isBlank()) return pedidoRepository.findAll(); return pedidoRepository.buscar(busqueda.trim()); }
     @Transactional(readOnly = true) public long contarEnCurso() { return pedidoRepository.countByEstado(Pedido.Estado.EN_CURSO); }
@@ -37,6 +49,12 @@ public class PedidoService {
     }
     @Transactional public Pedido crear(Pedido pedido) { if (pedido != null) pedido.setId(null); return guardar(pedido); }
     @Transactional public Pedido actualizar(Long id, Pedido datos) { Pedido pedido = buscarPorId(id); if (datos == null) throw new IllegalArgumentException("Los datos del pedido son obligatorios"); pedido.setCliente(datos.getCliente()); pedido.setFechaPedido(datos.getFechaPedido()); pedido.setFechaEntrega(datos.getFechaEntrega()); pedido.setOcasion(datos.getOcasion()); pedido.setPresupuesto(datos.getPresupuesto()); pedido.setEstado(datos.getEstado()); pedido.setObservaciones(datos.getObservaciones()); pedido.setDireccionEntrega(datos.getDireccionEntrega()); pedido.setContacto(datos.getContacto()); pedido.setTipoArreglo(datos.getTipoArreglo()); return pedidoRepository.save(pedido); }
-    @Transactional public void eliminar(Long id) { pedidoRepository.delete(buscarPorId(id)); }
+    @Transactional public void eliminar(Long id) {
+        Pedido pedido = buscarPorId(id);
+        if (entregaRepository.existsByPedidoId(id) || facturaRepository.existsByPedidoId(id)) {
+            throw new IllegalStateException("No se puede eliminar el pedido porque tiene entregas o facturas relacionadas");
+        }
+        pedidoRepository.delete(pedido);
+    }
     @Transactional @SuppressWarnings("null") public void cambiarEstado(Long id, Pedido.Estado estado) { Pedido pedido = buscarPorId(id); pedido.setEstado(estado); pedidoRepository.save(pedido); }
 }

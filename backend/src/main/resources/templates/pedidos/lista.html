@@ -20,7 +20,7 @@
 
         <!-- Imagen principal del módulo Pedidos -->
         <div style="margin-bottom: 1.5rem; text-align: center;">
-            <img th:src="@{/img/pedidos_flores.jpg}" alt="Pedidos Florales" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px;">
+            <img th:src="@{/img/Pedidos-Flores.jpg}" alt="Pedidos Florales" style="width: 100%; max-height: 460px; object-fit: contain; border-radius: 8px; background: #f6f2ef; display: block; margin: 0 auto;">
         </div>
 
         <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
@@ -50,7 +50,7 @@
                     <div class="flower-actions">
                         <a class="row-link" th:href="@{/pedidos/{id}(id=${pedido.id})}">Ver</a>
                         <a class="row-link" th:href="@{/pedidos/{id}/editar(id=${pedido.id})}">Editar</a>
-                        <form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este pedido?');">
+                        <form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Está seguro de eliminar este registro?');">
                             <button class="row-link" type="submit">Eliminar</button>
                         </form>
                     </div>

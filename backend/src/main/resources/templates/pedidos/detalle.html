@@ -58,7 +58,7 @@
 
         <div class="actions">
             <a class="button" th:href="@{/pedidos/{id}/editar(id=${pedido.id})}">Editar</a>
-            <form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este pedido?');">
+            <form th:action="@{/pedidos/{id}/eliminar(id=${pedido.id})}" method="post" onsubmit="return confirm('¿Está seguro de eliminar este registro?');">
                 <button class="button secondary" type="submit">Eliminar</button>
             </form>
             <a class="text-link" th:href="@{/pedidos}">Volver</a>

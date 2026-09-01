@@ -17,7 +17,7 @@
                 <div class="flower-icon">◎</div>
                 <div class="flower-data"><h3 th:text="${conductor.nombre}">Conductor</h3><p th:text="${conductor.telefono + ' · Documento: ' + conductor.documento}">Teléfono · Documento</p></div>
                 <span class="stock" th:text="${conductor.estado}">ACTIVO</span>
-                <div class="flower-actions"><a class="row-link" th:href="@{/conductores/{id}/editar(id=${conductor.id})}">Editar</a><form th:action="@{/conductores/{id}/eliminar(id=${conductor.id})}" method="post" onsubmit="return confirm('¿Deseas eliminar este conductor?');"><button class="row-link" type="submit">Eliminar</button></form></div>
+                <div class="flower-actions"><a class="row-link" th:href="@{/conductores/{id}/editar(id=${conductor.id})}">Editar</a><form th:action="@{/conductores/{id}/eliminar(id=${conductor.id})}" method="post" onsubmit="return confirm('¿Está seguro de eliminar este registro?');"><button class="row-link" type="submit">Eliminar</button></form></div>
             </article>
         </div>
     </section>

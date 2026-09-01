@@ -2,6 +2,7 @@ package com.floresdelvalle.floristeria.controlador;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,6 +15,21 @@ public class ManejoErroresController {
     public String recursoNoEncontrado(IllegalArgumentException exception, Model model) {
         model.addAttribute("titulo", "No encontramos ese registro");
         model.addAttribute("mensaje", exception.getMessage());
+        return "error";
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public String reglaDeNegocio(IllegalStateException exception, Model model) {
+        model.addAttribute("titulo", "No se puede completar esta acción");
+        model.addAttribute("mensaje", exception.getMessage());
+        return "error";
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public String integridadReferencial(DataIntegrityViolationException exception, Model model) {
+        LOGGER.log(Level.WARNING, "Intento de eliminación con dependencias activas", exception);
+        model.addAttribute("titulo", "Registro relacionado");
+        model.addAttribute("mensaje", "No se puede eliminar este registro porque tiene datos relacionados en el sistema.");
         return "error";
     }
 
