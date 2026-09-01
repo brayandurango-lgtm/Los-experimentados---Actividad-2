@@ -26,7 +26,7 @@ public class EntregaController {
     @GetMapping("/entregas/nueva")
     public String nueva(Model model) { prepararFormulario(model, new Entrega()); return "entregas/formulario"; }
 
-    @PostMapping("/entregas")
+    @PostMapping({"/entregas", "/entregas/guardar"})
     public String guardar(@Valid Entrega entrega, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) { prepararFormulario(model, entrega); return "entregas/formulario"; }
         try {
@@ -38,16 +38,25 @@ public class EntregaController {
         return "redirect:/entregas";
     }
 
+    @PostMapping("/entregas/actualizar/{id}")
+    public String actualizar(@PathVariable Long id, @Valid Entrega entrega, BindingResult bindingResult,
+                            Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) { prepararFormulario(model, entrega); return "entregas/formulario"; }
+        entregaService.actualizar(id, entrega);
+        redirectAttributes.addFlashAttribute("mensaje", "Entrega actualizada correctamente");
+        return "redirect:/entregas";
+    }
+
     @GetMapping("/entregas/{id}")
     public String detalle(@PathVariable Long id, Model model) { model.addAttribute("entrega", entregaService.buscarPorId(id)); model.addAttribute("estados", Entrega.Estado.values()); return "entregas/detalle"; }
 
-    @GetMapping("/entregas/{id}/editar")
+    @GetMapping({"/entregas/{id}/editar", "/entregas/editar/{id}"})
     public String editar(@PathVariable Long id, Model model) { prepararFormulario(model, entregaService.buscarPorId(id)); return "entregas/formulario"; }
 
     @PostMapping("/entregas/{id}/estado")
     public String cambiarEstado(@PathVariable Long id, Entrega.Estado estado, RedirectAttributes redirectAttributes) { entregaService.cambiarEstado(id, estado); redirectAttributes.addFlashAttribute("mensaje", "Estado de entrega actualizado"); return "redirect:/entregas/" + id; }
 
-    @PostMapping("/entregas/{id}/eliminar")
+    @PostMapping({"/entregas/{id}/eliminar", "/entregas/eliminar/{id}"})
     public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) { entregaService.eliminar(id); redirectAttributes.addFlashAttribute("mensaje", "Entrega eliminada correctamente"); return "redirect:/entregas"; }
 
     private void prepararFormulario(Model model, Entrega entrega) { model.addAttribute("entrega", entrega); model.addAttribute("pedidos", pedidoService.listar()); model.addAttribute("conductores", conductorService.listar()); model.addAttribute("estados", Entrega.Estado.values()); }

@@ -39,7 +39,7 @@ public class PedidoController {
         return "pedidos/formulario";
     }
 
-    @PostMapping("/pedidos")
+    @PostMapping({"/pedidos", "/pedidos/guardar"})
     public String guardar(@Valid Pedido pedido, BindingResult bindingResult,
                           Model model, RedirectAttributes redirectAttributes) {
         if (pedido.getId() == null) {
@@ -64,13 +64,25 @@ public class PedidoController {
         return "redirect:/pedidos";
     }
 
+    @PostMapping("/pedidos/actualizar/{id}")
+    public String actualizar(@PathVariable Long id, @Valid Pedido pedido, BindingResult bindingResult,
+                            Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            prepararFormulario(model, pedido);
+            return "pedidos/formulario";
+        }
+        pedidoService.actualizar(id, pedido);
+        redirectAttributes.addFlashAttribute("mensaje", "Pedido actualizado correctamente");
+        return "redirect:/pedidos";
+    }
+
     @GetMapping("/pedidos/{id}")
     public String detalle(@PathVariable Long id, Model model) {
         model.addAttribute("pedido", pedidoService.buscarPorId(id));
         return "pedidos/detalle";
     }
 
-    @GetMapping("/pedidos/{id}/editar")
+    @GetMapping({"/pedidos/{id}/editar", "/pedidos/editar/{id}"})
     public String editar(@PathVariable Long id, Model model) {
         prepararFormulario(model, pedidoService.buscarPorId(id));
         return "pedidos/formulario";

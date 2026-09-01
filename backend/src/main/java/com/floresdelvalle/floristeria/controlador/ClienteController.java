@@ -28,7 +28,7 @@ public class ClienteController {
         return "clientes/formulario";
     }
 
-    @PostMapping("/clientes")
+    @PostMapping({"/clientes", "/clientes/guardar"})
     public String guardar(@Valid Cliente cliente, BindingResult bindingResult,
                           RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -44,13 +44,24 @@ public class ClienteController {
         return "redirect:/clientes";
     }
 
-    @GetMapping("/clientes/{id}/editar")
+    @PostMapping("/clientes/actualizar/{id}")
+    public String actualizar(@PathVariable Long id, @Valid Cliente cliente, BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "clientes/formulario";
+        }
+        clienteService.actualizar(id, cliente);
+        redirectAttributes.addFlashAttribute("mensaje", "Cliente actualizado correctamente");
+        return "redirect:/clientes";
+    }
+
+    @GetMapping({"/clientes/{id}/editar", "/clientes/editar/{id}"})
     public String editar(@PathVariable Long id, Model model) {
         model.addAttribute("cliente", clienteService.buscarPorId(id));
         return "clientes/formulario";
     }
 
-    @PostMapping("/clientes/{id}/eliminar")
+    @PostMapping({"/clientes/{id}/eliminar", "/clientes/eliminar/{id}"})
     public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             clienteService.eliminar(id);

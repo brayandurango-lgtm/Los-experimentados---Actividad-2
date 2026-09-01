@@ -25,7 +25,7 @@ public class FacturaController {
     @GetMapping("/facturas/nueva")
     public String nueva(Model model) { prepararFormulario(model, new Factura()); return "facturas/formulario"; }
 
-    @PostMapping("/facturas")
+    @PostMapping({"/facturas", "/facturas/guardar"})
     public String guardar(@Valid Factura factura, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) { prepararFormulario(model, factura); return "facturas/formulario"; }
         try {
@@ -34,6 +34,15 @@ public class FacturaController {
         } catch (IllegalArgumentException exception) {
             bindingResult.rejectValue("pedido", "duplicado", exception.getMessage()); prepararFormulario(model, factura); return "facturas/formulario";
         }
+        return "redirect:/facturas";
+    }
+
+    @PostMapping("/facturas/actualizar/{id}")
+    public String actualizar(@PathVariable Long id, @Valid Factura factura, BindingResult bindingResult,
+                            Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) { prepararFormulario(model, factura); return "facturas/formulario"; }
+        facturaService.actualizar(id, factura);
+        redirectAttributes.addFlashAttribute("mensaje", "Factura actualizada correctamente");
         return "redirect:/facturas";
     }
 
@@ -47,10 +56,10 @@ public class FacturaController {
         return "redirect:/facturas";
     }
 
-    @GetMapping("/facturas/{id}/editar")
+    @GetMapping({"/facturas/{id}/editar", "/facturas/editar/{id}"})
     public String editar(@PathVariable Long id, Model model) { prepararFormulario(model, facturaService.buscarPorId(id)); return "facturas/formulario"; }
 
-    @PostMapping("/facturas/{id}/eliminar")
+    @PostMapping({"/facturas/{id}/eliminar", "/facturas/eliminar/{id}"})
     public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) { facturaService.eliminar(id); redirectAttributes.addFlashAttribute("mensaje", "Factura eliminada correctamente"); return "redirect:/facturas"; }
 
     @PostMapping("/facturas/{id}/pagos")

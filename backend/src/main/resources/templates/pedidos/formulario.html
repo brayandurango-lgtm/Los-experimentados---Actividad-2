@@ -18,7 +18,7 @@
             <img th:src="@{/img/pedidos_flores.jpg}" alt="Encargo de Flores" style="width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px;">
         </div>
 
-        <form class="form-panel light-panel" th:action="@{/pedidos}" th:object="${pedido}" method="post">
+        <form class="form-panel light-panel" th:action="@{/pedidos/guardar}" th:object="${pedido}" method="post">
             <input type="hidden" th:field="*{id}">
 
             <label>Cliente
@@ -74,6 +74,14 @@
                     <small th:errors="*{presupuesto}"></small>
                 </label>
             </div>
+
+            <label>Estado
+                <select th:field="*{estado}" required>
+                    <option value="">Selecciona un estado</option>
+                    <option th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}"></option>
+                </select>
+                <small th:errors="*{estado}"></small>
+            </label>
 
             <button type="submit">Guardar pedido <span>→</span></button>
         </form>

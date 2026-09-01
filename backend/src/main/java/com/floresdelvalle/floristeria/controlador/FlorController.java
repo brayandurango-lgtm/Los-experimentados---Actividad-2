@@ -21,7 +21,7 @@ public class FlorController {
         this.florService = florService;
     }
 
-    @GetMapping("/flores")
+    @GetMapping({"/flores", "/flores/buscar"})
     public String listar(@RequestParam(required = false) String busqueda, Model model) {
         model.addAttribute("flores", florService.listar(busqueda));
         model.addAttribute("busqueda", busqueda);
@@ -47,6 +47,17 @@ public class FlorController {
             florService.actualizar(flor.getId(), flor);
             redirectAttributes.addFlashAttribute("mensaje", "Flor actualizada correctamente");
         }
+        return "redirect:/flores";
+    }
+
+    @PostMapping("/flores/actualizar/{id}")
+    public String actualizar(@PathVariable Long id, @Valid Flor flor, BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "flores/formulario";
+        }
+        florService.actualizar(id, flor);
+        redirectAttributes.addFlashAttribute("mensaje", "Flor actualizada correctamente");
         return "redirect:/flores";
     }
 

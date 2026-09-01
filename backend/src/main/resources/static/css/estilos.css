@@ -54,6 +54,8 @@ small { display: block; margin-top: 5px; color: #f4b29e; font-size: 10px; text-t
 button { width: 100%; margin-top: 12px; padding: 15px 17px; color: var(--sage-dark); background: #f3c3b1; border: 0; font: bold 13px 'Trebuchet MS', sans-serif; cursor: pointer; transition: background .2s, transform .2s; }
 button:hover { background: #ffd6c7; transform: translateY(-2px); }
 button span { float: right; font-size: 18px; line-height: 12px; }
+input, select, textarea, button, form { pointer-events: auto !important; }
+input, textarea { user-select: text !important; }
 .notice { margin: -20px 0 28px; padding: 13px 16px; color: var(--sage-dark); background: #dbe6d5; font-family: 'Trebuchet MS', sans-serif; font-size: 13px; }
 .notice.success { color: #28563a; background: #dbe6d5; border-left: 3px solid #5b9b6d; }
 .notice.error, small.error { color: #8c3d31; background: #f5d9d2; border-left: 3px solid var(--coral); }
@@ -88,7 +90,7 @@ nav a:hover, .text-link:hover, .row-link:hover { color: var(--coral); }
 .light-panel label { color: var(--muted); }
 .light-panel input, .light-panel select { color: var(--ink); border-color: var(--line); }
 .search-bar { display: flex; gap: 12px; margin-bottom: 24px; }
-.search-bar input { flex: 1; padding: 13px 14px; background: var(--panel); border: 1px solid var(--line); }
+.search-bar input { flex: 1; padding: 13px 14px; color: #7b2cbf; background: var(--panel); border: 1px solid var(--line); }
 .search-bar button { margin: 0; }
 .search-bar button, .button { width: auto; }
 .detail-grid, .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 40px 0; background: var(--line); border: 1px solid var(--line); }
@@ -142,7 +144,7 @@ table { width: 100%; border-collapse: collapse; font-family: 'Trebuchet MS', san
 th, td { padding: 14px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
 th { color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
 td { color: var(--ink); }
-.form-panel input, .form-panel select, .form-panel textarea { color: #fff; background: transparent; border-color: #91a08b; }
+.form-panel input, .form-panel select, .form-panel textarea { color: #7b2cbf; background: transparent; border-color: #91a08b; }
 .form-panel option { color: var(--ink); }
 .actions button { width: auto; margin-top: 0; }
 @media (max-width: 760px) { .site-header { align-items: flex-start; flex-direction: column; gap: 18px; } nav { justify-content: flex-start; width: 100%; gap: 14px; } .page-shell { padding-bottom: 38px; } .search-bar { flex-direction: column; } .search-bar button { width: 100%; } .detail-grid, .stats, .dashboard-stats { grid-template-columns: 1fr 1fr; } }
