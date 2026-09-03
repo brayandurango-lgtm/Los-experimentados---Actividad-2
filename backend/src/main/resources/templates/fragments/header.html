@@ -3,7 +3,7 @@
 <body>
 <header th:fragment="header" class="site-header">
     <a class="brand" th:href="@{/}">
-        <span class="brand-mark">✿</span><span>Flores del Valle</span>
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><b></b></span><span>Flores del Valle</span>
     </a>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 </header>
