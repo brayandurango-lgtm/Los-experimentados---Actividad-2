@@ -8,8 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EntregaRepository extends JpaRepository<Entrega, Long> {
     @Override
-    @EntityGraph(attributePaths = {"pedido", "conductor"})
+    @EntityGraph(attributePaths = {"pedido", "pedido.cliente", "conductor"})
     Optional<Entrega> findById(Long id);
+
+    @Override
+    @EntityGraph(attributePaths = {"pedido", "pedido.cliente", "conductor"})
+    List<Entrega> findAll();
+
     long countByEstado(Entrega.Estado estado);
     List<Entrega> findByEstado(Entrega.Estado estado);
     boolean existsByPedidoId(Long pedidoId);

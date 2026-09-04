@@ -36,6 +36,9 @@ public class FacturaService {
         if (pagoRepository.existsByFacturaId(id)) {
             throw new IllegalStateException("No se puede eliminar la factura porque tiene pagos registrados");
         }
+        if (factura.getPedido() != null) {
+            factura.getPedido().setFactura(null);
+        }
         facturaRepository.delete(factura);
     }
     @Transactional public Factura generarParaPedidoCompletado(Pedido pedido) { if (pedido == null || pedido.getId() == null) throw new IllegalArgumentException("El pedido es obligatorio"); if (pedido.getEstado() != Pedido.Estado.COMPLETADO) throw new IllegalStateException("Solo se puede facturar un pedido completado"); return facturaRepository.findByPedidoId(pedido.getId()).orElseGet(() -> { Factura factura = new Factura(); factura.setPedido(pedido); BigDecimal subtotal = pedido.getDetalles().stream().map(detalle -> detalle.getSubtotal() == null ? detalle.getPrecioUnitario().multiply(BigDecimal.valueOf(detalle.getCantidad())) : detalle.getSubtotal()).reduce(BigDecimal.ZERO, BigDecimal::add); factura.setSubtotal(subtotal); return guardar(factura); }); }

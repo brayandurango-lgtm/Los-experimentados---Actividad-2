@@ -57,7 +57,15 @@ public class EntregaController {
     public String cambiarEstado(@PathVariable Long id, Entrega.Estado estado, RedirectAttributes redirectAttributes) { entregaService.cambiarEstado(id, estado); redirectAttributes.addFlashAttribute("mensaje", "Estado de entrega actualizado"); return "redirect:/entregas/" + id; }
 
     @PostMapping({"/entregas/{id}/eliminar", "/entregas/eliminar/{id}"})
-    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) { entregaService.eliminar(id); redirectAttributes.addFlashAttribute("mensaje", "Entrega eliminada correctamente"); return "redirect:/entregas"; }
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            entregaService.eliminar(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Entrega eliminada correctamente");
+        } catch (IllegalStateException | IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute("mensaje", exception.getMessage());
+        }
+        return "redirect:/entregas";
+    }
 
     private void prepararFormulario(Model model, Entrega entrega) { model.addAttribute("entrega", entrega); model.addAttribute("pedidos", pedidoService.listar()); model.addAttribute("conductores", conductorService.listar()); model.addAttribute("estados", Entrega.Estado.values()); }
 }

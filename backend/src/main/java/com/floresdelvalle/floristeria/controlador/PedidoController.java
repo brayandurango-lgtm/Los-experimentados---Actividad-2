@@ -98,8 +98,12 @@ public class PedidoController {
 
     @PostMapping("/pedidos/{id}/eliminar")
     public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        pedidoService.eliminar(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Pedido eliminado correctamente");
+        try {
+            pedidoService.eliminar(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Pedido eliminado correctamente");
+        } catch (IllegalStateException | IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute("mensaje", exception.getMessage());
+        }
         return "redirect:/pedidos";
     }
 

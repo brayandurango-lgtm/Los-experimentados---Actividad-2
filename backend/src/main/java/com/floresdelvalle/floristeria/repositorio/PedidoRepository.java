@@ -3,11 +3,21 @@ package com.floresdelvalle.floristeria.repositorio;
 import com.floresdelvalle.floristeria.modelo.Pedido;
 import com.floresdelvalle.floristeria.modelo.Cliente;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+
+	@Override
+	@EntityGraph(attributePaths = {"cliente"})
+	List<Pedido> findAll();
+
+	@Override
+	@EntityGraph(attributePaths = {"cliente", "detalles", "detalles.flor"})
+	Optional<Pedido> findById(Long id);
 
 	long countByEstado(Pedido.Estado estado);
 
