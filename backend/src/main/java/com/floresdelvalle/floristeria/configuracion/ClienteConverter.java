@@ -3,7 +3,6 @@ package com.floresdelvalle.floristeria.configuracion;
 import com.floresdelvalle.floristeria.modelo.Cliente;
 import com.floresdelvalle.floristeria.repositorio.ClienteRepository;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,12 +15,11 @@ public class ClienteConverter implements Converter<String, Cliente> {
 
     @Override
     @SuppressWarnings("null")
-    public Cliente convert(@NonNull String source) {
+    public Cliente convert(String source) {
         if (source == null || source.isBlank()) {
-            throw new IllegalArgumentException("El cliente es obligatorio");
+            return null;
         }
         Long clienteId = Long.valueOf(source);
-        return clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new IllegalArgumentException("El cliente no existe"));
+        return clienteRepository.findById(clienteId).orElse(null);
     }
 }

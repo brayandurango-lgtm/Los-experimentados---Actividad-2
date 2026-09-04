@@ -75,8 +75,12 @@ public class FlorController {
 
     @PostMapping("/flores/eliminar/{id}")
     public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        florService.eliminar(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Flor eliminada del catálogo");
+        try {
+            florService.eliminar(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Flor eliminada del catálogo");
+        } catch (IllegalStateException | IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute("mensaje", exception.getMessage());
+        }
         return "redirect:/flores";
     }
 

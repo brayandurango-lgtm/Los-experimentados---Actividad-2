@@ -60,7 +60,15 @@ public class FacturaController {
     public String editar(@PathVariable Long id, Model model) { prepararFormulario(model, facturaService.buscarPorId(id)); return "facturas/formulario"; }
 
     @PostMapping({"/facturas/{id}/eliminar", "/facturas/eliminar/{id}"})
-    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) { facturaService.eliminar(id); redirectAttributes.addFlashAttribute("mensaje", "Factura eliminada correctamente"); return "redirect:/facturas"; }
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            facturaService.eliminar(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Factura eliminada correctamente");
+        } catch (IllegalStateException | IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute("mensaje", exception.getMessage());
+        }
+        return "redirect:/facturas";
+    }
 
     @PostMapping("/facturas/{id}/pagos")
     public String registrarPago(@PathVariable Long id, @Valid Pago pago, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
