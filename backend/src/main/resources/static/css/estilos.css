@@ -1,3 +1,8 @@
+/* Delivery banner */
+.page-shell > div:has(> img[src*="flores-de-pedidos"]) { position: relative; min-height: 230px; margin-bottom: 30px !important; overflow: hidden; background: var(--sage-dark); text-align: left !important; }
+.page-shell > div:has(> img[src*="flores-de-pedidos"])::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(32, 35, 31, .72), rgba(32, 35, 31, .12)); }
+.page-shell > div:has(> img[src*="flores-de-pedidos"]) img { width: 100% !important; height: 230px !important; max-height: none !important; object-fit: cover !important; object-position: center 52%; border-radius: 0 !important; background: transparent !important; }
+@media (max-width: 600px) { .page-shell > div:has(> img[src*="flores-de-pedidos"]), .page-shell > div:has(> img[src*="flores-de-pedidos"]) img { min-height: 260px; height: 260px !important; } .page-shell > div:has(> img[src*="flores-de-pedidos"])::after { background: linear-gradient(180deg, rgba(32, 35, 31, .08), rgba(32, 35, 31, .82)); } }
 :root {
     --ink: #20231f;
     --muted: #72786e;
