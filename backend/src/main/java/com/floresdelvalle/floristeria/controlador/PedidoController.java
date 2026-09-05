@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class PedidoController {
@@ -38,6 +41,16 @@ public class PedidoController {
         prepararFormulario(model, new Pedido());
         return "pedidos/formulario";
     }
+
+    @GetMapping("/pedidos/clientes")
+    @ResponseBody
+    public List<ClienteOpcion> buscarClientes(@RequestParam(required = false) String nombre) {
+        return clienteService.buscarParaPedido(nombre).stream()
+                .map(cliente -> new ClienteOpcion(cliente.getId(), cliente.getNombre()))
+                .toList();
+    }
+
+    private record ClienteOpcion(Long id, String nombre) { }
 
     @PostMapping({"/pedidos", "/pedidos/guardar"})
     public String guardar(@Valid Pedido pedido, BindingResult bindingResult,
@@ -105,7 +118,7 @@ public class PedidoController {
 
     private void prepararFormulario(Model model, Pedido pedido) {
         model.addAttribute("pedido", pedido);
-        model.addAttribute("clientes", clienteService.listar());
+        model.addAttribute("clientes", clienteService.buscarParaPedido(null));
         model.addAttribute("flores", florService.listar(null));
         model.addAttribute("estados", Pedido.Estado.values());
     }

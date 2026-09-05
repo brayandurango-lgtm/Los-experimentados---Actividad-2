@@ -13,6 +13,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
 	List<Pedido> findByEstado(Pedido.Estado estado);
 
+	List<Pedido> findByFacturaIsNull();
+
 	List<Pedido> findByCliente(Cliente cliente);
 
 	@Query("select p from Pedido p join p.cliente c where lower(c.nombre) like lower(concat('%', :busqueda, '%')) "

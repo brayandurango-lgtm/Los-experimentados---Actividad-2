@@ -13,18 +13,15 @@
         <p class="eyebrow" th:text="${pedido.id == null ? 'Nuevo pedido' : 'Editar pedido'}"></p>
         <h1>Organiza un encargo.</h1>
 
-        <!-- Imagen del formulario -->
-        <div style="text-align: center; margin-bottom: 1.5rem;">
-            <img th:src="@{/img/pedidos_flores.jpg}" alt="Encargo de Flores" style="width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px;">
-        </div>
-
         <form class="form-panel light-panel" th:action="@{/pedidos/guardar}" th:object="${pedido}" method="post">
             <input type="hidden" th:field="*{id}">
 
             <label>Cliente
-                <select th:field="*{cliente}" required>
+                <input type="search" id="buscarCliente" placeholder="Buscar cliente" autocomplete="off">
+                <select id="cliente" name="cliente" required>
                     <option value="">Selecciona un cliente</option>
-                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre}"></option>
+                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre}"
+                            th:selected="${pedido.cliente != null and pedido.cliente.id == cliente.id}"></option>
                 </select>
                 <small th:errors="*{cliente}"></small>
             </label>
@@ -88,5 +85,19 @@
     </main>
 
     <div th:replace="~{fragments/footer :: footer}"></div>
+    <script>
+        const buscarCliente = document.getElementById('buscarCliente');
+        const selectorCliente = document.getElementById('cliente');
+
+        buscarCliente.addEventListener('input', async () => {
+            const respuesta = await fetch(`/pedidos/clientes?nombre=${encodeURIComponent(buscarCliente.value)}`);
+            if (!respuesta.ok) return;
+            const clientes = await respuesta.json();
+            const clienteSeleccionado = selectorCliente.value;
+            selectorCliente.replaceChildren(new Option('Selecciona un cliente', ''));
+            clientes.forEach(cliente => selectorCliente.add(new Option(cliente.nombre, cliente.id)));
+            selectorCliente.value = clienteSeleccionado;
+        });
+    </script>
 </body>
 </html>

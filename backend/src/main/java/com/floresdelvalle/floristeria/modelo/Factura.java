@@ -81,4 +81,10 @@ public class Factura {
     public void setEstado(Estado estado) { this.estado = estado; }
     public List<Pago> getPagos() { return pagos; }
     public void setPagos(List<Pago> pagos) { this.pagos = pagos; }
+    public BigDecimal getTotalPagado() {
+        return pagos.stream()
+                .filter(pago -> pago.getEstado() == Pago.Estado.PAGADO || pago.getEstado() == Pago.Estado.REGISTRADO)
+                .map(Pago::getValor)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

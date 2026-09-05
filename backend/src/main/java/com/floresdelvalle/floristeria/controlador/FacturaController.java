@@ -6,6 +6,7 @@ import com.floresdelvalle.floristeria.servicio.FacturaService;
 import com.floresdelvalle.floristeria.servicio.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class FacturaController {
         try {
             if (factura.getId() == null) { facturaService.crear(factura); redirectAttributes.addFlashAttribute("mensaje", "Factura registrada"); }
             else { facturaService.actualizar(factura.getId(), factura); redirectAttributes.addFlashAttribute("mensaje", "Factura actualizada correctamente"); }
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException | DataIntegrityViolationException exception) {
             bindingResult.rejectValue("pedido", "duplicado", exception.getMessage()); prepararFormulario(model, factura); return "facturas/formulario";
         }
         return "redirect:/facturas";
@@ -74,5 +75,8 @@ public class FacturaController {
         return "redirect:/facturas/" + id;
     }
 
-    private void prepararFormulario(Model model, Factura factura) { model.addAttribute("factura", factura); model.addAttribute("pedidos", pedidoService.listar()); }
+    private void prepararFormulario(Model model, Factura factura) {
+        model.addAttribute("factura", factura);
+        model.addAttribute("pedidos", pedidoService.listar());
+    }
 }

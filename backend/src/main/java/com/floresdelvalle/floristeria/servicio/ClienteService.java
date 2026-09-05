@@ -11,6 +11,9 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     public ClienteService(ClienteRepository clienteRepository) { this.clienteRepository = clienteRepository; }
     @Transactional(readOnly = true) public List<Cliente> listar() { return clienteRepository.findAll(); }
+    @Transactional(readOnly = true) public List<Cliente> buscarParaPedido(String nombre) {
+        return clienteRepository.findTop50ByNombreContainingIgnoreCaseOrderByNombreAsc(nombre == null ? "" : nombre.trim());
+    }
     @Transactional(readOnly = true) @SuppressWarnings("null") public Cliente buscarPorId(Long id) { return clienteRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El cliente no existe")); }
     @Transactional(readOnly = true) public Cliente obtenerPorId(Long id) { return buscarPorId(id); }
     @Transactional @SuppressWarnings("null") public Cliente guardar(Cliente cliente) { return clienteRepository.save(cliente); }
